@@ -15,11 +15,6 @@ app.use(logger);
 app.use(express.json());
 app.use(cors());
 
-// Логування часу
-app.use((req, res, next) => {
-  console.log(`Time: ${new Date().toLocaleString()}`);
-  next();
-});
 // маршрути
 app.use(notesRoutes);
 
