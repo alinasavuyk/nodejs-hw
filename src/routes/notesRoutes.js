@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { Note } from '../models/note.js';
 import {
 	getAllNotes,
 	getNoteById,
