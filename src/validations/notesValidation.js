@@ -9,7 +9,7 @@ export const getAllNotesSchema = {
     tag: Joi.string()
       .valid(...TAGS)
       .optional(),
-    search: Joi.string().allow('').optional(),
+    search: Joi.string().trim().allow("")
   }),
 };
 // Кастомний валідатор для ObjectId
