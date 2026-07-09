@@ -4,10 +4,29 @@ import createHttpError from 'http-errors'
 
 // Отримати список усіх студентів
 export const getAllNotes = async (req, res) => {
-   const { page = 1, perPage = 10 } = req.query;
+   const { page = 1, perPage = 10, gender, minAvgMark, search } = req.query;
 
   const skip = (page - 1) * perPage;
   const notesQuery = Note.find();
+  const countQuery = Note.countDocuments();
+  // Пошук по частині імені
+  if (tag) {
+      notesQuery.where({ tag });
+      countQuery.where({ tag });
+    }
+
+    if (search) {
+      const searchFilter = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { content: { $regex: search, $options: 'i' } },
+        ],
+      };
+      notesQuery.where(searchFilter);
+      countQuery.where(searchFilter);
+    }
+
+
  // Будуємо фільтр
   if (gender) {
     notesQuery.where("gender").equals(gender);
