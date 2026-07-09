@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import { errors } from 'celebrate';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { Note } from './models/note.js';
 import { logger } from './middleware/logger.js';
@@ -20,6 +21,7 @@ app.use(notesRoutes);
 
 // 404 і обробник помилок — наприкінці ланцюжка
 app.use(notFoundHandler);
+app.use(errors());
 app.use(errorHandler);
 
 // підключення до MongoDB
