@@ -4,7 +4,7 @@ import createHttpError from 'http-errors'
 
 // Отримати список усіх студентів
 export const getAllNotes = async (req, res) => {
-   const { page = 1, perPage = 10, search,tag } = req.query;
+   const { page = 1, perPage = 10, gender, minAvgMark, search } = req.query;
 
   const skip = (page - 1) * perPage;
   const notesQuery = Note.find();
@@ -26,17 +26,26 @@ export const getAllNotes = async (req, res) => {
       countQuery.where(searchFilter);
     }
 
-const [totalNotes, notes] = await Promise.all([
-    countQuery,
+
+ // Будуємо фільтр
+  if (gender) {
+    notesQuery.where("gender").equals(gender);
+  }
+  if (minAvgMark) {
+    notesQuery.where("avgMark").gte(minAvgMark);
+  }
+
+  const [totalItems, notes] = await Promise.all([
+    notesQuery.clone().countDocuments(),
     notesQuery.skip(skip).limit(perPage),
   ]);
 
-  const totalPages = Math.ceil(totalNotes / perPage);
+  const totalPages = Math.ceil(totalItems / perPage);
 
   res.status(200).json({
     page,
     perPage,
-    totalNotes,
+    totalItems,
     totalPages,
     notes,
   });
